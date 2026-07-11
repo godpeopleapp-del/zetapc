@@ -1,0 +1,847 @@
+<!--
+  ╔══════════════════════════════════════════════════════╗
+  ║  추추몬 크리에이터 산출물                              ║
+  ║  제타PC방 신촌점 랜딩페이지                            ║
+  ╚══════════════════════════════════════════════════════╝
+-->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제타PC방 신촌점 - 다음 레벨은, 제타</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /*
+    ── 플랫폼 레이아웃 규칙 (수정 금지) ──────────────────
+    데스크탑: 편집 패널(좌) + 사이트(우) 나란히 표시
+    모바일: 편집 패널 숨김 → 사이트만 단독 표시
+    이 CSS는 어떤 플랫폼에서도 동일하게 동작합니다
+  */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+  body {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  .chuchumon-editor {
+    width: 40%;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .chuchumon-preview {
+    width: 60%;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  /* 모바일: 편집 패널 숨김, 사이트 전체 너비 */
+  @media (max-width: 768px) {
+    .chuchumon-editor {
+      display: none;
+    }
+    .chuchumon-preview {
+      width: 100%;
+    }
+  }
+  /*
+    ── 사이트 제작 규칙 ────────────────────────────────
+    - .chuchumon-preview 안의 콘텐츠는 반응형으로 제작
+    - 고정 픽셀 너비 사용 금지 (%, vw 사용)
+    - 폰트 크기는 상대 단위 권장 (rem, em, vw)
+    - hover 전용 인터랙션 지양 → click/touch 기반으로 구현
+  */
+
+  /* ══════════════════════════════════════════════════
+     디자인 토큰 (제타PC방)
+     bg-void #0B0E14 / panel #131826 / line #232B3D
+     cyan #4CF3FF (모니터 글로우) / magenta #FF3D7A (CTA 포인트)
+     text-primary #F1F4F9 / text-muted #8A93A6
+     display: 'Black Han Sans' / body: 'Noto Sans KR' / data: 'JetBrains Mono'
+  ══════════════════════════════════════════════════ */
+
+  .chuchumon-editor {
+    background: #0d1017;
+    color: #dfe4ee;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 1.5rem 1.5rem 4rem;
+  }
+  .chuchumon-editor h2 {
+    font-size: 1.1rem;
+    color: #4CF3FF;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.02em;
+  }
+  .chuchumon-editor p.ed-desc {
+    font-size: 0.78rem;
+    color: #6b7386;
+    margin-bottom: 1.5rem;
+  }
+  .ed-group {
+    background: #131826;
+    border: 1px solid #232b3d;
+    border-radius: 0.6rem;
+    padding: 1rem 1.1rem;
+    margin-bottom: 1rem;
+  }
+  .ed-group h3 {
+    font-size: 0.82rem;
+    color: #ff3d7a;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.8rem;
+  }
+  .ed-row {
+    margin-bottom: 0.7rem;
+  }
+  .ed-row:last-child { margin-bottom: 0; }
+  .ed-row label {
+    display: block;
+    font-size: 0.72rem;
+    color: #8a93a6;
+    margin-bottom: 0.3rem;
+  }
+  .ed-row input[type="text"],
+  .ed-row input[type="number"],
+  .ed-row textarea {
+    width: 100%;
+    background: #0d1017;
+    border: 1px solid #2b3448;
+    color: #f1f4f9;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.82rem;
+    font-family: inherit;
+  }
+  .ed-row input:focus,
+  .ed-row textarea:focus {
+    outline: none;
+    border-color: #4CF3FF;
+  }
+  .ed-row textarea { resize: vertical; min-height: 3.2rem; }
+  .ed-two { display: flex; gap: 0.6rem; }
+  .ed-two > div { flex: 1; }
+  .ed-spec-row, .ed-price-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .ed-spec-row input, .ed-price-row input { flex: 1; }
+  .ed-note {
+    font-size: 0.7rem;
+    color: #4CF3FF;
+    margin-top: 0.6rem;
+  }
+
+  /* ══════════════════════════════════════════════════
+     미리보기 (실제 방문자 화면)
+  ══════════════════════════════════════════════════ */
+  .chuchumon-preview {
+    background: #0B0E14;
+    color: #F1F4F9;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+  .zt-page section { padding: 4rem 6% 4rem; }
+
+  /* ── nav ───────────────────────────────────────── */
+  .zt-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 6%;
+    border-bottom: 1px solid #1c2230;
+    position: sticky;
+    top: 0;
+    background: rgba(11,14,20,0.85);
+    backdrop-filter: blur(6px);
+    z-index: 10;
+  }
+  .zt-nav .zt-logo {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: #F1F4F9;
+    letter-spacing: 0.02em;
+  }
+  .zt-nav .zt-logo span { color: #4CF3FF; }
+  .zt-nav .zt-cta {
+    background: #FF3D7A;
+    color: #0B0E14;
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* ── hero ──────────────────────────────────────── */
+  .zt-hero {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3rem;
+    align-items: center;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(76,243,255,0.14), transparent 55%),
+      radial-gradient(ellipse at 90% 100%, rgba(255,61,122,0.12), transparent 55%);
+    padding-top: 4.5rem !important;
+  }
+  .zt-hero-text { flex: 1 1 55%; min-width: 260px; }
+  .zt-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: #4CF3FF;
+    letter-spacing: 0.15em;
+    margin-bottom: 1rem;
+  }
+  .zt-hero-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(2.2rem, 6vw, 3.6rem);
+    line-height: 1.15;
+    margin-bottom: 1.1rem;
+  }
+  .zt-hero-title .zt-accent {
+    background: linear-gradient(90deg, #4CF3FF, #8affe0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .zt-hero-sub {
+    color: #a8b0c2;
+    font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+    max-width: 34rem;
+    margin-bottom: 2rem;
+    line-height: 1.7;
+  }
+  .zt-hero-actions { display: flex; gap: 0.8rem; flex-wrap: wrap; }
+  .zt-btn-primary {
+    background: #4CF3FF;
+    color: #061014;
+    font-weight: 700;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .zt-btn-ghost {
+    background: transparent;
+    color: #F1F4F9;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    border: 1px solid #3a4358;
+    font-size: 0.92rem;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* ── 시그니처: ZETA 성능 게이지 ─────────────────── */
+  .zt-gauge-wrap {
+    flex: 1 1 35%;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #131826;
+    border: 1px solid #232b3d;
+    border-radius: 1.2rem;
+    padding: 1.6rem 1.2rem;
+  }
+  .zt-gauge-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: #8a93a6;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.6rem;
+  }
+  .zt-gauge-svg { width: 100%; max-width: 15rem; }
+  .zt-gauge-value {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 2rem;
+    color: #4CF3FF;
+    margin-top: -2.2rem;
+  }
+  .zt-gauge-unit {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #ff3d7a;
+    margin-top: 0.2rem;
+    letter-spacing: 0.08em;
+  }
+  @keyframes zt-fill {
+    from { stroke-dashoffset: 251; }
+  }
+  .zt-gauge-arc { animation: zt-fill 1.4s ease-out; }
+
+  /* ── 실시간 좌석 현황판 ─────────────────────────── */
+  .zt-status {
+    background: #0d1117;
+    border-top: 1px solid #1c2230;
+    border-bottom: 1px solid #1c2230;
+  }
+  .zt-status-board {
+    font-family: 'JetBrains Mono', monospace;
+    background: #05070a;
+    border: 1px solid #1c2230;
+    border-radius: 0.8rem;
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .zt-status-title {
+    font-size: 0.78rem;
+    color: #4CF3FF;
+    letter-spacing: 0.12em;
+  }
+  .zt-status-nums { display: flex; gap: 2rem; }
+  .zt-status-num { text-align: center; }
+  .zt-status-num .n {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: #F1F4F9;
+    line-height: 1;
+  }
+  .zt-status-num.zt-live .n { color: #4CF3FF; }
+  .zt-status-num .l {
+    font-size: 0.68rem;
+    color: #6b7386;
+    margin-top: 0.3rem;
+  }
+  .zt-status-dot {
+    display: inline-block;
+    width: 0.5rem; height: 0.5rem;
+    border-radius: 50%;
+    background: #4CF3FF;
+    margin-right: 0.4rem;
+    box-shadow: 0 0 0.5rem #4CF3FF;
+  }
+
+  /* ── 섹션 공통 ─────────────────────────────────── */
+  .zt-section-head { margin-bottom: 2.2rem; }
+  .zt-section-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    color: #ff3d7a;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+  }
+  .zt-section-title {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  }
+
+  /* ── 사양 그리드 ───────────────────────────────── */
+  .zt-spec-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+    gap: 1rem;
+  }
+  .zt-spec-card {
+    background: #131826;
+    border: 1px solid #232b3d;
+    border-radius: 0.9rem;
+    padding: 1.3rem 1.2rem;
+  }
+  .zt-spec-card .k {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #8a93a6;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.5rem;
+  }
+  .zt-spec-card .v {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #4CF3FF;
+  }
+  .zt-more-btn {
+    margin-top: 1.5rem;
+    background: transparent;
+    border: 1px solid #3a4358;
+    color: #f1f4f9;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  .zt-more-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .zt-more-panel.zt-open { max-height: 20rem; margin-top: 1.2rem; }
+  .zt-more-panel p {
+    color: #a8b0c2;
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  /* ── 요금표 ───────────────────────────────────── */
+  .zt-price-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 1.2rem;
+  }
+  .zt-price-card {
+    background: #131826;
+    border: 1px solid #232b3d;
+    border-radius: 1rem;
+    padding: 1.6rem 1.4rem;
+    position: relative;
+  }
+  .zt-price-card.zt-best {
+    border-color: #4CF3FF;
+    box-shadow: 0 0 0 1px #4CF3FF inset;
+  }
+  .zt-best-badge {
+    position: absolute;
+    top: -0.7rem; right: 1rem;
+    background: #4CF3FF;
+    color: #061014;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+  }
+  .zt-price-name { color: #8a93a6; font-size: 0.85rem; margin-bottom: 0.6rem; }
+  .zt-price-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    font-weight: 700;
+    color: #F1F4F9;
+  }
+  .zt-price-num span { font-size: 0.85rem; color: #6b7386; font-weight: 400; }
+
+  /* ── 이벤트 배너 ──────────────────────────────── */
+  .zt-event {
+    background: linear-gradient(120deg, #1a0f18, #0B0E14 60%);
+    border: 1px solid #3a1e2c;
+    border-radius: 1.2rem;
+    padding: 2.2rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .zt-event-copy { max-width: 34rem; }
+  .zt-event-copy h3 {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: clamp(1.2rem, 2.6vw, 1.6rem);
+    color: #FF3D7A;
+    margin-bottom: 0.5rem;
+  }
+  .zt-event-copy p { color: #cbd2e1; font-size: 0.9rem; line-height: 1.7; }
+
+  /* ── 오시는길 ─────────────────────────────────── */
+  .zt-visit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+  .zt-visit-map {
+    flex: 1 1 45%;
+    min-height: 14rem;
+    border-radius: 1rem;
+    background:
+      repeating-linear-gradient(0deg, #131826, #131826 1px, #0B0E14 1px, #0B0E14 2.2rem),
+      repeating-linear-gradient(90deg, #131826, #131826 1px, #0B0E14 1px, #0B0E14 2.2rem);
+    border: 1px solid #232b3d;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .zt-visit-map .pin {
+    width: 2.6rem; height: 2.6rem;
+    border-radius: 50% 50% 50% 0;
+    background: #FF3D7A;
+    transform: rotate(-45deg);
+    box-shadow: 0 0 1.5rem rgba(255,61,122,0.6);
+  }
+  .zt-visit-info { flex: 1 1 40%; min-width: 240px; }
+  .zt-visit-info dl { margin-top: 1rem; }
+  .zt-visit-info dt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #4CF3FF;
+    letter-spacing: 0.08em;
+    margin-top: 1rem;
+  }
+  .zt-visit-info dd { color: #e5e9f2; font-size: 0.98rem; margin-top: 0.2rem; }
+
+  /* ── footer ───────────────────────────────────── */
+  .zt-footer {
+    padding: 2.2rem 6% !important;
+    border-top: 1px solid #1c2230;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    color: #6b7386;
+    font-size: 0.8rem;
+  }
+  .zt-footer a { color: #4CF3FF; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ① 편집 패널 -->
+<div class="chuchumon-editor">
+  <h2>⚡ 제타PC방 랜딩페이지 편집</h2>
+  <p class="ed-desc">값을 바꾸면 오른쪽 미리보기가 즉시 반영됩니다.</p>
+
+  <div class="ed-group">
+    <h3>브랜드 기본정보</h3>
+    <div class="ed-row">
+      <label>상호명</label>
+      <input type="text" id="in-brand" value="제타PC방">
+    </div>
+    <div class="ed-row">
+      <label>지점명</label>
+      <input type="text" id="in-branch" value="신촌점">
+    </div>
+    <div class="ed-row">
+      <label>헤드라인 (강조 단어는 자동으로 시안색 처리됩니다)</label>
+      <input type="text" id="in-headline" value="다음 레벨은, 제타.">
+    </div>
+    <div class="ed-row">
+      <label>서브 카피</label>
+      <textarea id="in-sub">신촌 한복판, 제타바이트급 사양으로 세팅한 좌석. 인풋랙 없는 240Hz 모니터와 최신 그래픽카드로 체감 속도부터 다릅니다.</textarea>
+    </div>
+  </div>
+
+  <div class="ed-group">
+    <h3>실시간 좌석 현황</h3>
+    <div class="ed-two">
+      <div class="ed-row">
+        <label>총 좌석수</label>
+        <input type="number" id="in-seat-total" value="80">
+      </div>
+      <div class="ed-row">
+        <label>이용 가능 좌석수</label>
+        <input type="number" id="in-seat-open" value="23">
+      </div>
+    </div>
+  </div>
+
+  <div class="ed-group">
+    <h3>PC 사양</h3>
+    <div class="ed-spec-row">
+      <input type="text" id="in-spec-k0" value="CPU">
+      <input type="text" id="in-spec-v0" value="Intel Core i9-14900K">
+    </div>
+    <div class="ed-spec-row">
+      <input type="text" id="in-spec-k1" value="GPU">
+      <input type="text" id="in-spec-v1" value="RTX 4080 SUPER">
+    </div>
+    <div class="ed-spec-row">
+      <input type="text" id="in-spec-k2" value="RAM">
+      <input type="text" id="in-spec-v2" value="32GB DDR5">
+    </div>
+    <div class="ed-spec-row">
+      <input type="text" id="in-spec-k3" value="모니터">
+      <input type="text" id="in-spec-v3" value="27인치 240Hz QHD">
+    </div>
+    <div class="ed-row">
+      <label>사양 상세 설명 (더보기 클릭 시 표시)</label>
+      <textarea id="in-spec-more">전 좌석 기계식 키보드, 무소음 젤 마우스패드, 넥밴드형 개인 스피커 제공. 흡연실·샤워실 완비, 24시간 냉난방 항시 가동.</textarea>
+    </div>
+  </div>
+
+  <div class="ed-group">
+    <h3>요금 안내</h3>
+    <div class="ed-price-row">
+      <input type="text" id="in-price-name0" value="1시간권">
+      <input type="text" id="in-price-val0" value="1,500">
+    </div>
+    <div class="ed-price-row">
+      <input type="text" id="in-price-name1" value="3시간권">
+      <input type="text" id="in-price-val1" value="4,200">
+    </div>
+    <div class="ed-price-row">
+      <input type="text" id="in-price-name2" value="종일권 (10시간)">
+      <input type="text" id="in-price-val2" value="9,900">
+    </div>
+    <div class="ed-row">
+      <label>추천 요금제 (0,1,2 중 선택)</label>
+      <input type="number" id="in-price-best" value="1" min="0" max="2">
+    </div>
+  </div>
+
+  <div class="ed-group">
+    <h3>이벤트 배너</h3>
+    <div class="ed-row">
+      <label>이벤트 제목</label>
+      <input type="text" id="in-event-title" value="신촌점 오픈 기념 이벤트">
+    </div>
+    <div class="ed-row">
+      <label>이벤트 설명</label>
+      <textarea id="in-event-body">첫 방문 고객 전 좌석 50% 할인, 학생증 지참 시 종일권 추가 1시간 무료 증정.</textarea>
+    </div>
+  </div>
+
+  <div class="ed-group">
+    <h3>오시는길</h3>
+    <div class="ed-row">
+      <label>주소</label>
+      <input type="text" id="in-address" value="서울 서대문구 신촌로 12, 3층">
+    </div>
+    <div class="ed-row">
+      <label>전화번호</label>
+      <input type="text" id="in-phone" value="02-1234-5678">
+    </div>
+    <div class="ed-row">
+      <label>운영시간</label>
+      <input type="text" id="in-hours" value="24시간 연중무휴">
+    </div>
+    <div class="ed-row">
+      <label>인스타그램 아이디</label>
+      <input type="text" id="in-insta" value="@zeta_sinchon">
+    </div>
+  </div>
+
+  <p class="ed-note">※ 시안색(청록)·마젠타 포인트 컬러는 고정 디자인 값이며 이 편집 패널에서는 변경되지 않습니다.</p>
+</div>
+
+<!-- ② 실제 사이트 -->
+<div class="chuchumon-preview">
+  <div class="zt-page">
+
+    <nav class="zt-nav">
+      <div class="zt-logo" id="pv-nav-logo">제타<span>PC방</span></div>
+      <a class="zt-cta" href="#zt-visit" id="pv-nav-cta">길찾기</a>
+    </nav>
+
+    <section class="zt-hero">
+      <div class="zt-hero-text">
+        <div class="zt-eyebrow">SINCHON · 24H GAMING LOUNGE</div>
+        <h1 class="zt-hero-title" id="pv-headline">다음 레벨은, <span class="zt-accent">제타</span>.</h1>
+        <p class="zt-hero-sub" id="pv-sub">신촌 한복판, 제타바이트급 사양으로 세팅한 좌석. 인풋랙 없는 240Hz 모니터와 최신 그래픽카드로 체감 속도부터 다릅니다.</p>
+        <div class="zt-hero-actions">
+          <a class="zt-btn-primary" href="#zt-status">실시간 좌석 보기</a>
+          <a class="zt-btn-ghost" href="#zt-price">요금표 보기</a>
+        </div>
+      </div>
+
+      <div class="zt-gauge-wrap">
+        <div class="zt-gauge-label">ZETA POWER INDEX</div>
+        <svg class="zt-gauge-svg" viewBox="0 0 100 60">
+          <path d="M 10 55 A 40 40 0 1 1 90 55" fill="none" stroke="#232b3d" stroke-width="8" stroke-linecap="round"/>
+          <path class="zt-gauge-arc" d="M 10 55 A 40 40 0 1 1 90 55" fill="none" stroke="#4CF3FF" stroke-width="8" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="8"/>
+        </svg>
+        <div class="zt-gauge-value">ZETA</div>
+        <div class="zt-gauge-unit">각성 완료 · 10²¹ LEVEL</div>
+      </div>
+    </section>
+
+    <section class="zt-status" id="zt-status">
+      <div class="zt-status-board">
+        <div class="zt-status-title"><span class="zt-status-dot"></span>실시간 좌석 현황</div>
+        <div class="zt-status-nums">
+          <div class="zt-status-num zt-live">
+            <div class="n" id="pv-seat-open">23</div>
+            <div class="l">이용 가능</div>
+          </div>
+          <div class="zt-status-num">
+            <div class="n" id="pv-seat-total">80</div>
+            <div class="l">전체 좌석</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="zt-section-head">
+        <div class="zt-section-eyebrow">SPEC</div>
+        <h2 class="zt-section-title">전 좌석 동일 사양, 타협 없음</h2>
+      </div>
+      <div class="zt-spec-grid" id="pv-spec-grid"></div>
+      <button class="zt-more-btn" id="pv-more-btn" type="button">사양 상세 더보기</button>
+      <div class="zt-more-panel" id="pv-more-panel">
+        <p id="pv-spec-more">전 좌석 기계식 키보드, 무소음 젤 마우스패드, 넥밴드형 개인 스피커 제공. 흡연실·샤워실 완비, 24시간 냉난방 항시 가동.</p>
+      </div>
+    </section>
+
+    <section id="zt-price">
+      <div class="zt-section-head">
+        <div class="zt-section-eyebrow">PRICE</div>
+        <h2 class="zt-section-title">요금 안내</h2>
+      </div>
+      <div class="zt-price-grid" id="pv-price-grid"></div>
+    </section>
+
+    <section>
+      <div class="zt-event">
+        <div class="zt-event-copy">
+          <h3 id="pv-event-title">신촌점 오픈 기념 이벤트</h3>
+          <p id="pv-event-body">첫 방문 고객 전 좌석 50% 할인, 학생증 지참 시 종일권 추가 1시간 무료 증정.</p>
+        </div>
+        <a class="zt-btn-primary" href="#zt-visit">지금 방문하기</a>
+      </div>
+    </section>
+
+    <section id="zt-visit">
+      <div class="zt-section-head">
+        <div class="zt-section-eyebrow">LOCATION</div>
+        <h2 class="zt-section-title">오시는길</h2>
+      </div>
+      <div class="zt-visit">
+        <div class="zt-visit-map"><div class="pin"></div></div>
+        <div class="zt-visit-info">
+          <div class="zt-hero-sub" style="margin-bottom:0;">신촌역 도보 5분, 연세로 인근에서 가장 쾌적한 24시간 게이밍 라운지입니다.</div>
+          <dl>
+            <dt>주소</dt>
+            <dd id="pv-address">서울 서대문구 신촌로 12, 3층</dd>
+            <dt>전화</dt>
+            <dd id="pv-phone">02-1234-5678</dd>
+            <dt>운영시간</dt>
+            <dd id="pv-hours">24시간 연중무휴</dd>
+            <dt>인스타그램</dt>
+            <dd id="pv-insta">@zeta_sinchon</dd>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <footer class="zt-footer">
+      <div id="pv-footer-brand">© 제타PC방 신촌점</div>
+      <a href="#zt-visit">오시는길</a>
+    </footer>
+
+  </div>
+</div>
+
+<script>
+  // ── 상태 ────────────────────────────────────────
+  const state = {
+    brand: '제타', branch: 'PC방',
+    headline: '다음 레벨은, 제타.',
+    sub: '신촌 한복판, 제타바이트급 사양으로 세팅한 좌석. 인풋랙 없는 240Hz 모니터와 최신 그래픽카드로 체감 속도부터 다릅니다.',
+    seatTotal: 80, seatOpen: 23,
+    specs: [
+      { k: 'CPU', v: 'Intel Core i9-14900K' },
+      { k: 'GPU', v: 'RTX 4080 SUPER' },
+      { k: 'RAM', v: '32GB DDR5' },
+      { k: '모니터', v: '27인치 240Hz QHD' }
+    ],
+    specMore: '전 좌석 기계식 키보드, 무소음 젤 마우스패드, 넥밴드형 개인 스피커 제공. 흡연실·샤워실 완비, 24시간 냉난방 항시 가동.',
+    prices: [
+      { name: '1시간권', val: '1,500' },
+      { name: '3시간권', val: '4,200' },
+      { name: '종일권 (10시간)', val: '9,900' }
+    ],
+    priceBest: 1,
+    eventTitle: '신촌점 오픈 기념 이벤트',
+    eventBody: '첫 방문 고객 전 좌석 50% 할인, 학생증 지참 시 종일권 추가 1시간 무료 증정.',
+    address: '서울 서대문구 신촌로 12, 3층',
+    phone: '02-1234-5678',
+    hours: '24시간 연중무휴',
+    insta: '@zeta_sinchon'
+  };
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function renderPreview() {
+    document.getElementById('pv-nav-logo').innerHTML = esc(state.brand) + '<span>' + esc(state.branch) + '</span>';
+    document.getElementById('pv-headline').innerHTML = esc(state.headline).replace(/제타/g, '<span class="zt-accent">제타</span>');
+    document.getElementById('pv-sub').textContent = state.sub;
+    document.getElementById('pv-seat-open').textContent = state.seatOpen;
+    document.getElementById('pv-seat-total').textContent = state.seatTotal;
+
+    const specGrid = document.getElementById('pv-spec-grid');
+    specGrid.innerHTML = state.specs.map(s =>
+      '<div class="zt-spec-card"><div class="k">' + esc(s.k) + '</div><div class="v">' + esc(s.v) + '</div></div>'
+    ).join('');
+    document.getElementById('pv-spec-more').textContent = state.specMore;
+
+    const priceGrid = document.getElementById('pv-price-grid');
+    priceGrid.innerHTML = state.prices.map((p, i) =>
+      '<div class="zt-price-card' + (i === Number(state.priceBest) ? ' zt-best' : '') + '">' +
+        (i === Number(state.priceBest) ? '<div class="zt-best-badge">추천</div>' : '') +
+        '<div class="zt-price-name">' + esc(p.name) + '</div>' +
+        '<div class="zt-price-num">' + esc(p.val) + '<span>원</span></div>' +
+      '</div>'
+    ).join('');
+
+    document.getElementById('pv-event-title').textContent = state.eventTitle;
+    document.getElementById('pv-event-body').textContent = state.eventBody;
+    document.getElementById('pv-address').textContent = state.address;
+    document.getElementById('pv-phone').textContent = state.phone;
+    document.getElementById('pv-hours').textContent = state.hours;
+    document.getElementById('pv-insta').textContent = state.insta;
+    document.getElementById('pv-footer-brand').textContent = '© ' + state.brand + state.branch;
+  }
+
+  // ── 편집 패널 바인딩 ─────────────────────────────
+  function bind(id, cb) {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', cb);
+  }
+
+  bind('in-brand', e => { state.brand = e.target.value; sync(); });
+  bind('in-branch', e => { state.branch = e.target.value; sync(); });
+  bind('in-headline', e => { state.headline = e.target.value; sync(); });
+  bind('in-sub', e => { state.sub = e.target.value; sync(); });
+  bind('in-seat-total', e => { state.seatTotal = Number(e.target.value) || 0; sync(); });
+  bind('in-seat-open', e => { state.seatOpen = Number(e.target.value) || 0; sync(); });
+
+  for (let i = 0; i < 4; i++) {
+    bind('in-spec-k' + i, e => { state.specs[i].k = e.target.value; sync(); });
+    bind('in-spec-v' + i, e => { state.specs[i].v = e.target.value; sync(); });
+  }
+  bind('in-spec-more', e => { state.specMore = e.target.value; sync(); });
+
+  for (let i = 0; i < 3; i++) {
+    bind('in-price-name' + i, e => { state.prices[i].name = e.target.value; sync(); });
+    bind('in-price-val' + i, e => { state.prices[i].val = e.target.value; sync(); });
+  }
+  bind('in-price-best', e => { state.priceBest = e.target.value; sync(); });
+
+  bind('in-event-title', e => { state.eventTitle = e.target.value; sync(); });
+  bind('in-event-body', e => { state.eventBody = e.target.value; sync(); });
+  bind('in-address', e => { state.address = e.target.value; sync(); });
+  bind('in-phone', e => { state.phone = e.target.value; sync(); });
+  bind('in-hours', e => { state.hours = e.target.value; sync(); });
+  bind('in-insta', e => { state.insta = e.target.value; sync(); });
+
+  // 더보기 (클릭 기반 인터랙션)
+  const moreBtn = document.getElementById('pv-more-btn');
+  const morePanel = document.getElementById('pv-more-panel');
+  moreBtn.addEventListener('click', () => {
+    const open = morePanel.classList.toggle('zt-open');
+    moreBtn.textContent = open ? '사양 상세 접기' : '사양 상세 더보기';
+  });
+
+  // ── 편집 패널 → 미리보기 연동 ──────────────────────────
+  // 편집 패널에서 변경 발생 시 sendUpdate(data)를 호출하세요
+  // 추추몬AI 플랫폼에서 자동으로 미리보기에 전달합니다
+  function sendUpdate(data) {
+    window.parent.postMessage({ type: 'CHUCHUMON_UPDATE', data }, '*');
+  }
+  function sync() {
+    renderPreview();
+    sendUpdate(state);
+  }
+  // 미리보기에서 수신 후 DOM 업데이트
+  window.addEventListener('message', (e) => {
+    if (e.data?.type !== 'CHUCHUMON_UPDATE') return;
+    Object.assign(state, e.data.data);
+    renderPreview();
+  });
+
+  renderPreview();
+</script>
+</body>
+</html>
