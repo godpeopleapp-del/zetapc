@@ -837,7 +837,8 @@
   // 편집 패널에서 변경 발생 시 sendUpdate(data)를 호출하세요
   // 추추몬AI 플랫폼에서 자동으로 미리보기에 전달합니다
   function sendUpdate(data) {
-    window.parent.postMessage({ type: 'CHUCHUMON_UPDATE', data }, '*');
+    const previewHtml = document.documentElement.outerHTML;
+    window.parent.postMessage({ type: 'CHUCHUMON_UPDATE', data, previewHtml }, '*');
   }
   function sync() {
     renderPreview();
