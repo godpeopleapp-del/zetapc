@@ -843,8 +843,54 @@
     renderPreview();
     sendUpdate(state);
   }
+
+  function setVal(id, v) {
+    const el = document.getElementById(id);
+    if (el && v !== undefined) el.value = v;
+  }
+
+  // 편집 패널 폼을 이전 상태(data)로 복원
+  function restoreForm(data) {
+    if (!data) return;
+    Object.assign(state, data);
+
+    setVal('in-brand', state.brand);
+    setVal('in-branch', state.branch);
+    setVal('in-headline', state.headline);
+    setVal('in-sub', state.sub);
+    setVal('in-seat-total', state.seatTotal);
+    setVal('in-seat-open', state.seatOpen);
+
+    (state.specs || []).forEach((s, i) => {
+      setVal('in-spec-k' + i, s.k);
+      setVal('in-spec-v' + i, s.v);
+    });
+    setVal('in-spec-more', state.specMore);
+
+    (state.prices || []).forEach((p, i) => {
+      setVal('in-price-name' + i, p.name);
+      setVal('in-price-val' + i, p.val);
+    });
+    setVal('in-price-best', state.priceBest);
+
+    setVal('in-event-title', state.eventTitle);
+    setVal('in-event-body', state.eventBody);
+    setVal('in-address', state.address);
+    setVal('in-phone', state.phone);
+    setVal('in-hours', state.hours);
+    setVal('in-insta', state.insta);
+
+    renderPreview();
+  }
+
   // 미리보기에서 수신 후 DOM 업데이트
   window.addEventListener('message', (e) => {
+    if (e.data?.type === 'CHUCHUMON_RESTORE') {
+      // 편집 패널 폼을 이전 상태로 복원하세요
+      // e.data.data 에 마지막으로 sendUpdate()에 전달했던 data가 들어옵니다
+      restoreForm(e.data.data);
+      return;
+    }
     if (e.data?.type !== 'CHUCHUMON_UPDATE') return;
     Object.assign(state, e.data.data);
     renderPreview();
