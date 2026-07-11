@@ -15,16 +15,17 @@
 <style>
   /*
     ── 플랫폼 레이아웃 규칙 (수정 금지) ──────────────────
-    데스크탑: 편집 패널(좌) + 사이트(우) 나란히 표시
+    데스크탑: 편집 패널(좌) + 사이트(우) 나란히 표시, 각각 독립 스크롤
     모바일: 편집 패널 숨김 → 사이트만 단독 표시
     이 CSS는 어떤 플랫폼에서도 동일하게 동작합니다
   */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body {
+  * { box-sizing: border-box; }
+  html {
     height: 100%;
-    overflow: hidden;
   }
   body {
+    height: 100%;
+    overflow: hidden;
     display: flex;
     margin: 0;
     padding: 0;
@@ -56,6 +57,14 @@
     - 폰트 크기는 상대 단위 권장 (rem, em, vw)
     - hover 전용 인터랙션 지양 → click/touch 기반으로 구현
   */
+
+  /* 플랫폼 전역 리셋에서 margin/padding 초기화가 빠져
+     .chuchumon-editor / .chuchumon-preview 내부 요소에
+     한정해 동일한 리셋을 보강합니다 (레이아웃 규칙과 무관) */
+  .chuchumon-editor *, .chuchumon-preview * {
+    margin: 0;
+    padding: 0;
+  }
 
   /* ══════════════════════════════════════════════════
      디자인 토큰 (제타PC방)
