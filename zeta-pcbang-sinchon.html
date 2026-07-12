@@ -14,10 +14,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   /*
-    ── 플랫폼 레이아웃 규칙 (수정 금지) ──────────────────
-    데스크탑: 편집 패널(좌) + 사이트(우) 나란히 표시, 각각 독립 스크롤
-    모바일: 편집 패널 숨김 → 사이트만 단독 표시
-    이 CSS는 어떤 플랫폼에서도 동일하게 동작합니다
+    ── 플랫폼 외부(독립 실행) 레이아웃 ──
+    데스크탑: 편집 패널 40% 왼쪽 | 사이트 60% 오른쪽, 각각 독립 스크롤
+    모바일: 사이트만 100% 표시
   */
   * { box-sizing: border-box; }
   html {
@@ -41,7 +40,6 @@
     height: 100vh;
     overflow-y: auto;
   }
-  /* 모바일: 편집 패널 숨김, 사이트 전체 너비 */
   @media (max-width: 768px) {
     .chuchumon-editor {
       display: none;
@@ -50,20 +48,7 @@
       width: 100%;
     }
   }
-  /* 배포 시 자동 적용: 편집 패널 숨김 + 사이트 전체 화면 */
-  body.live-mode {
-    display: block !important;
-    overflow: auto !important;
-    height: auto !important;
-  }
-  body.live-mode .chuchumon-editor {
-    display: none !important;
-  }
-  body.live-mode .chuchumon-preview {
-    width: 100% !important;
-    height: auto !important;
-    overflow-y: auto !important;
-  }
+  /* ── 플랫폼 내부에서는 플랫폼이 CSS 오버라이드 ── */
   /*
     ── 사이트 제작 규칙 ────────────────────────────────
     - .chuchumon-preview 안의 콘텐츠는 반응형으로 제작
@@ -813,31 +798,31 @@
     if (el) el.addEventListener('input', cb);
   }
 
-  bind('in-brand', e => { state.brand = e.target.value; sync(); });
-  bind('in-branch', e => { state.branch = e.target.value; sync(); });
-  bind('in-headline', e => { state.headline = e.target.value; sync(); });
-  bind('in-sub', e => { state.sub = e.target.value; sync(); });
-  bind('in-seat-total', e => { state.seatTotal = Number(e.target.value) || 0; sync(); });
-  bind('in-seat-open', e => { state.seatOpen = Number(e.target.value) || 0; sync(); });
+  bind('in-brand', e => { state.brand = e.target.value; sendUpdate(state); });
+  bind('in-branch', e => { state.branch = e.target.value; sendUpdate(state); });
+  bind('in-headline', e => { state.headline = e.target.value; sendUpdate(state); });
+  bind('in-sub', e => { state.sub = e.target.value; sendUpdate(state); });
+  bind('in-seat-total', e => { state.seatTotal = Number(e.target.value) || 0; sendUpdate(state); });
+  bind('in-seat-open', e => { state.seatOpen = Number(e.target.value) || 0; sendUpdate(state); });
 
   for (let i = 0; i < 4; i++) {
-    bind('in-spec-k' + i, e => { state.specs[i].k = e.target.value; sync(); });
-    bind('in-spec-v' + i, e => { state.specs[i].v = e.target.value; sync(); });
+    bind('in-spec-k' + i, e => { state.specs[i].k = e.target.value; sendUpdate(state); });
+    bind('in-spec-v' + i, e => { state.specs[i].v = e.target.value; sendUpdate(state); });
   }
-  bind('in-spec-more', e => { state.specMore = e.target.value; sync(); });
+  bind('in-spec-more', e => { state.specMore = e.target.value; sendUpdate(state); });
 
   for (let i = 0; i < 3; i++) {
-    bind('in-price-name' + i, e => { state.prices[i].name = e.target.value; sync(); });
-    bind('in-price-val' + i, e => { state.prices[i].val = e.target.value; sync(); });
+    bind('in-price-name' + i, e => { state.prices[i].name = e.target.value; sendUpdate(state); });
+    bind('in-price-val' + i, e => { state.prices[i].val = e.target.value; sendUpdate(state); });
   }
-  bind('in-price-best', e => { state.priceBest = e.target.value; sync(); });
+  bind('in-price-best', e => { state.priceBest = e.target.value; sendUpdate(state); });
 
-  bind('in-event-title', e => { state.eventTitle = e.target.value; sync(); });
-  bind('in-event-body', e => { state.eventBody = e.target.value; sync(); });
-  bind('in-address', e => { state.address = e.target.value; sync(); });
-  bind('in-phone', e => { state.phone = e.target.value; sync(); });
-  bind('in-hours', e => { state.hours = e.target.value; sync(); });
-  bind('in-insta', e => { state.insta = e.target.value; sync(); });
+  bind('in-event-title', e => { state.eventTitle = e.target.value; sendUpdate(state); });
+  bind('in-event-body', e => { state.eventBody = e.target.value; sendUpdate(state); });
+  bind('in-address', e => { state.address = e.target.value; sendUpdate(state); });
+  bind('in-phone', e => { state.phone = e.target.value; sendUpdate(state); });
+  bind('in-hours', e => { state.hours = e.target.value; sendUpdate(state); });
+  bind('in-insta', e => { state.insta = e.target.value; sendUpdate(state); });
 
   // 더보기 (클릭 기반 인터랙션)
   const moreBtn = document.getElementById('pv-more-btn');
@@ -847,16 +832,21 @@
     moreBtn.textContent = open ? '사양 상세 접기' : '사양 상세 더보기';
   });
 
-  // ── 편집 패널 → 미리보기 연동 ──────────────────────────
+  // ── 편집 패널 → 미리보기 업데이트 ──────────────────────
   // 편집 패널에서 변경 발생 시 sendUpdate(data)를 호출하세요
   // 추추몬AI 플랫폼에서 자동으로 미리보기에 전달합니다
   function sendUpdate(data) {
-    const previewHtml = document.documentElement.outerHTML;
-    window.parent.postMessage({ type: 'CHUCHUMON_UPDATE', data, previewHtml }, '*');
+    // 미리보기 DOM 직접 업데이트 (같은 문서 내 즉시 반영)
+    applyToPreview(data);
+    // 플랫폼 브로커에 신호 전송
+    window.parent.postMessage({ type: 'CHUCHUMON_UPDATE', data }, '*');
   }
-  function sync() {
+
+  // data의 각 필드를 state에 반영하고 미리보기 DOM을 다시 그립니다
+  function applyToPreview(data) {
+    if (!data) return;
+    Object.assign(state, data);
     renderPreview();
-    sendUpdate(state);
   }
 
   function setVal(id, v) {
@@ -898,7 +888,7 @@
     renderPreview();
   }
 
-  // 미리보기에서 수신 후 DOM 업데이트
+  // ── 플랫폼에서 CHUCHUMON_UPDATE / CHUCHUMON_RESTORE 수신 ──
   window.addEventListener('message', (e) => {
     if (e.data?.type === 'CHUCHUMON_RESTORE') {
       // 편집 패널 폼을 이전 상태로 복원하세요
@@ -907,8 +897,7 @@
       return;
     }
     if (e.data?.type !== 'CHUCHUMON_UPDATE') return;
-    Object.assign(state, e.data.data);
-    renderPreview();
+    applyToPreview(e.data.data);
   });
 
   renderPreview();
