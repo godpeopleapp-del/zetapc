@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>제타PC방 템플릿</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  html, body { margin:0; padding:0; width:100%; height:100%; overflow:hidden; }
+  body { display:flex; flex-direction:row; }
+
+  .chuchumon-editor {
+    width:40%; height:100vh; overflow-y:auto; flex-shrink:0;
+    background:#f5f5f5; border-right:1px solid #ddd; box-sizing:border-box;
+  }
+  .chuchumon-preview {
+    width:60%; height:100vh; overflow-y:auto; flex-grow:1;
+    background:#0B0F10; box-sizing:border-box;
+  }
+  @media (max-width:768px){
+    .chuchumon-editor{ display:none; }
+    .chuchumon-preview{ width:100%; }
+  }
+
+  .chuchumon-editor { padding:20px; font-family:'Inter',-apple-system,sans-serif; font-size:14px; }
+  .chuchumon-editor h2 { margin:0 0 4px; font-size:15px; font-weight:700; color:#222; }
+  .chuchumon-editor .sub { margin:0 0 18px; font-size:12px; color:#888; }
+  .chuchumon-editor .field { margin-bottom:14px; }
+  .chuchumon-editor label { display:block; margin-bottom:5px; font-size:12px; font-weight:600; color:#555; }
+  .chuchumon-editor input[type="text"], .chuchumon-editor textarea {
+    width:100%; padding:8px 10px; border:1px solid #ddd; border-radius:6px;
+    font-size:13px; box-sizing:border-box; outline:none; font-family:'Inter',sans-serif;
+  }
+  .chuchumon-editor input[type="text"]:focus, .chuchumon-editor textarea:focus { border-color:#7FDB6A; }
+  .chuchumon-editor .checkbox-row { display:flex; align-items:center; gap:8px; font-size:13px; color:#444; }
+  .chuchumon-editor .group-label { margin:22px 0 10px; font-size:11px; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:#999; border-top:1px solid #e2e2e2; padding-top:16px; }
+</style>
+</head>
+<body>
+
+<div class="chuchumon-editor">
+  <h2>⚙️ 설정 패널</h2>
+  <p class="sub">값을 바꾸면 오른쪽 미리보기에 실시간 반영됩니다</p>
+
+  <div class="field">
+    <label for="input-shop-name">가게 이름</label>
+    <input type="text" id="input-shop-name" name="shopName" value="제타PC방"
+      placeholder="가게 이름을 입력하세요" oninput="updateField(this)" />
+  </div>
+
+  <div class="field">
+    <label for="input-slogan">슬로건</label>
+    <input type="text" id="input-slogan" name="slogan" value="0.1초가 승패를 가른다"
+      placeholder="슬로건을 입력하세요" oninput="updateField(this)" />
+  </div>
+
+  <div class="field">
+    <label for="input-address">위치 안내</label>
+    <input type="text" id="input-address" name="address" value="화성시 동탄대로 123 · 24시간 운영"
+      placeholder="주소 및 운영시간" oninput="updateField(this)" />
+  </div>
+
+  <div class="group-label">사양 정보</div>
+
+  <div class="field">
+    <label for="input-gpu">그래픽카드</label>
+    <input type="text" id="input-gpu" name="gpu" value="RTX 4080 SUPER"
+      placeholder="예: RTX 4080" oninput="updateField(this)" />
+  </div>
+
+  <div class="field">
+    <label for="input-monitor">모니터</label>
+    <input type="text" id="input-monitor" name="monitor" value="240Hz · 27형"
+      placeholder="예: 240Hz 모니터" oninput="updateField(this)" />
+  </div>
+
+  <div class="field">
+    <label for="input-price">시간당 요금</label>
+    <input type="text" id="input-price" name="price" value="1,500원"
+      placeholder="예: 1,500원" oninput="updateField(this)" />
+  </div>
+
+  <div class="group-label">이벤트</div>
+
+  <div class="field">
+    <div class="checkbox-row">
+      <input type="checkbox" id="input-show-event" name="showEvent" checked onchange="updateField(this)" />
+      <label for="input-show-event" style="margin:0">이벤트 배너 표시</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="input-event-text">이벤트 문구</label>
+    <input type="text" id="input-event-text" name="eventText" value="신규 회원 첫 2시간 무료 체험"
+      placeholder="이벤트 내용을 입력하세요" oninput="updateField(this)" />
+  </div>
+</div>
+
+
+<div class="chuchumon-preview">
+  <div style="font-family:'Inter',sans-serif; color:#E7ECE9; min-height:100vh; padding:56px 40px 40px;">
+
+    <div style="display:flex; align-items:center; gap:10px; margin-bottom:56px;">
+      <span style="width:9px; height:9px; border-radius:50%; background:#B6F53C; display:inline-block;"></span>
+      <span style="font-family:'JetBrains Mono',monospace; font-size:12px; letter-spacing:.08em; color:#7C877E; text-transform:uppercase;">system online</span>
+    </div>
+
+    <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:#9AA69E; letter-spacing:.02em; margin-bottom:14px;">
+      ZETA / GAMING STATION
+    </div>
+    <h1 id="live-shop-name" style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:52px; line-height:1.08; margin:0 0 18px; color:#F3F7F4; letter-spacing:-0.01em;">
+      제타PC방
+    </h1>
+    <p id="live-slogan" style="font-family:'Space Grotesk',sans-serif; font-weight:500; font-size:20px; color:#B6F53C; margin:0 0 36px;">
+      0.1초가 승패를 가른다
+    </p>
+
+    <div id="live-event-banner" style="display:block; background:#161C17; border:1px solid #2B3A2C; border-left:3px solid #B6F53C; border-radius:0 8px 8px 0; padding:14px 18px; margin-bottom:40px; font-size:14px; color:#D6E6D0;">
+      <span id="live-event-text">신규 회원 첫 2시간 무료 체험</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:#222923; border:1px solid #222923; border-radius:10px; overflow:hidden; margin-bottom:40px;">
+      <div style="background:#101512; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#7C877E; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">GPU</div>
+        <div id="live-gpu" style="font-family:'JetBrains Mono',monospace; font-size:16px; color:#F3F7F4;">RTX 4080 SUPER</div>
+      </div>
+      <div style="background:#101512; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#7C877E; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">모니터</div>
+        <div id="live-monitor" style="font-family:'JetBrains Mono',monospace; font-size:16px; color:#F3F7F4;">240Hz · 27형</div>
+      </div>
+      <div style="background:#101512; padding:20px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#7C877E; text-transform:uppercase; letter-spacing:.06em; margin-bottom:8px;">요금</div>
+        <div id="live-price" style="font-family:'JetBrains Mono',monospace; font-size:16px; color:#F3F7F4;">1,500원 / 시간</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:40px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:#7C877E; text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px;">좌석 현황 · SEAT MAP</div>
+      <div id="seat-map" style="display:grid; grid-template-columns:repeat(12,1fr); gap:5px;"></div>
+      <div style="display:flex; gap:18px; margin-top:12px; font-family:'JetBrains Mono',monospace; font-size:11px; color:#7C877E;">
+        <span><span style="display:inline-block; width:8px; height:8px; background:#3A4A3B; border-radius:2px; margin-right:6px;"></span>이용중</span>
+        <span><span style="display:inline-block; width:8px; height:8px; background:#1A211B; border:1px solid #2B3A2C; border-radius:2px; margin-right:6px;"></span>대기중</span>
+      </div>
+    </div>
+
+    <div style="border-top:1px solid #222923; padding-top:20px; font-size:13px; color:#7C877E;">
+      <span id="live-address">화성시 동탄대로 123 · 24시간 운영</span>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+function sendUpdate(data) {
+  window.parent.postMessage({ type:'CHUCHUMON_UPDATE', data:data }, '*');
+}
+
+var templateData = {
+  shopName:  '제타PC방',
+  slogan:    '0.1초가 승패를 가른다',
+  address:   '화성시 동탄대로 123 · 24시간 운영',
+  gpu:       'RTX 4080 SUPER',
+  monitor:   '240Hz · 27형',
+  price:     '1,500원',
+  showEvent: true,
+  eventText: '신규 회원 첫 2시간 무료 체험'
+};
+
+function updateField(inputElement) {
+  var name  = inputElement.name;
+  var value = inputElement.type === 'checkbox' ? inputElement.checked : inputElement.value;
+
+  templateData[name] = value;
+
+  if (inputElement.type === 'checkbox') {
+    if (value) { inputElement.setAttribute('checked', 'checked'); }
+    else { inputElement.removeAttribute('checked'); }
+  } else {
+    inputElement.setAttribute('value', value);
+  }
+
+  sendUpdate(templateData);
+
+  if (document.querySelector('.chuchumon-preview')) {
+    applyToPreview(templateData);
+  }
+}
+
+window.addEventListener('message', function(e){
+  if (!e.data || e.data.type !== 'CHUCHUMON_UPDATE') return;
+  applyToPreview(e.data.data);
+});
+
+function applyToPreview(data) {
+  if (data.shopName !== undefined) {
+    var el = document.getElementById('live-shop-name');
+    if (el) el.textContent = data.shopName;
+  }
+  if (data.slogan !== undefined) {
+    var el = document.getElementById('live-slogan');
+    if (el) el.textContent = data.slogan;
+  }
+  if (data.address !== undefined) {
+    var el = document.getElementById('live-address');
+    if (el) el.textContent = data.address;
+  }
+  if (data.gpu !== undefined) {
+    var el = document.getElementById('live-gpu');
+    if (el) el.textContent = data.gpu;
+  }
+  if (data.monitor !== undefined) {
+    var el = document.getElementById('live-monitor');
+    if (el) el.textContent = data.monitor;
+  }
+  if (data.price !== undefined) {
+    var el = document.getElementById('live-price');
+    if (el) el.textContent = data.price + ' / 시간';
+  }
+  if (data.showEvent !== undefined) {
+    var el = document.getElementById('live-event-banner');
+    if (el) el.style.display = data.showEvent ? 'block' : 'none';
+  }
+  if (data.eventText !== undefined) {
+    var el = document.getElementById('live-event-text');
+    if (el) el.textContent = data.eventText;
+  }
+}
+
+(function renderSeatMap(){
+  var map = document.getElementById('seat-map');
+  if (!map) return;
+  var total = 36;
+  var occupiedRatio = 0.55;
+  for (var i = 0; i < total; i++) {
+    var seat = document.createElement('div');
+    var occupied = Math.random() < occupiedRatio;
+    seat.style.aspectRatio = '1';
+    seat.style.borderRadius = '2px';
+    if (occupied) {
+      seat.style.background = '#3A4A3B';
+    } else {
+      seat.style.background = '#1A211B';
+      seat.style.border = '1px solid #2B3A2C';
+    }
+    map.appendChild(seat);
+  }
+})();
+</script>
+</body>
+</html>
